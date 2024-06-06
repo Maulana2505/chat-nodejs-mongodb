@@ -8,10 +8,10 @@ export const signup = async (req, res) => {
         const { username, password, confirmpassword, gender } = req.body
         const user = await User.findOne({ username })
         if (password !== confirmpassword) {
-            return res.status(400).json({ error: "Password Don't match" })
+            return res.status(400).json({ msg: "Password Don't match" })
         }
         if (user) {
-            return res.status(400).json({ error: "Username Already Exists" })
+            return res.status(400).json({ msg: "Username Already Exists" })
         } else {
             const maleprofile = "https://avatar.iran.liara.run/public/boy"
             const femaleprofile = "https://avatar.iran.liara.run/public/girl"
@@ -27,16 +27,16 @@ export const signup = async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-        res.status(500).json({ error: "Internal Server Error" })
+        res.status(500).json({ msg: "Internal Server Error" })
     }
 }
 
 export const login = async (req, res) => {
     const { username, password } = req.body
     const user = await User.findOne({ username })
-    if (!user)  return res.status(400).json({ error: "Invalid username" })
+    if (!user)  return res.status(400).json({ msg: "Invalid username" })
     const passwordcorrect = await bcrypt.compare(password, user.password)
-    if (!passwordcorrect) return res.status(400).json({ error: "Invalid password" })
+    if (!passwordcorrect) return res.status(400).json({ msg: "Invalid password" })
     const tokens = jwt.sign({ id: user.id }, 'SecretAbis')
     res.status(200).json({ token: tokens, id: user.id })
 }
