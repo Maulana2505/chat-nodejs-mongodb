@@ -56,12 +56,13 @@ export const getMessages = async (req, res) => {
 
 export const getMessageswithparams = async (req, res) => {
 	try {
-		const id= req.params.id;
+		const id = req.params.id;
 		const senderId = req.user.id;
 
 		const conversation = await Conversation.findOne({
 			participants: { $all: [senderId, id] },
-		}).populate("messages"); 
+		}).sort({'messages.createdAt':'asc'}).populate("messages");
+		// .sort({"messages.createdAt":-1}).exec(); 
 
 		if (!conversation) return res.status(200).json([]);
 		const messages = conversation.messages;

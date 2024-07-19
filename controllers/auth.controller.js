@@ -38,6 +38,6 @@ export const login = async (req, res) => {
     const passwordcorrect = await bcrypt.compare(password, user.password)
     if (!passwordcorrect) return res.status(400).json({ msg: "Invalid password" })
     const tokens = jwt.sign({ id: user.id }, 'SecretAbis')
-    res.status(200).json({ token: tokens, id: user.id })
+    res.status(200).json({ token: tokens, id: user })
 }
 
